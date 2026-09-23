@@ -21,6 +21,27 @@ dark and light mode.
 **BetterDiscord:** the files use the standard `.theme.css` header format, so they
 can also be dropped into BetterDiscord's `themes` folder.
 
+## Vesktop background material (Acrylic)
+
+These themes support transparency, so Vesktop's
+`Settings → Window → Background Material` setting works with them —
+your blurred desktop wallpaper shows through the backdrop and glass panels:
+
+1. Set Background Material to `Acrylic` (or another transparent effect).
+2. Fully restart Discord from the tray — required after changing the setting.
+3. In Vencord QuickCSS (`Settings → Themes → QuickCSS`), lower the backdrop
+   opacity so the wallpaper comes through:
+
+```css
+:root {
+  --glass-opacity: 0.55;
+}
+```
+
+Values around `0.45–0.65` look best; `1` (default) is fully opaque.
+On clients without a transparency setting, lowering it just deepens
+the backdrop, so it is safe to experiment.
+
 ## Customize
 
 Every theme exposes its palette as CSS variables, so you can tweak it in
@@ -32,6 +53,9 @@ Vencord QuickCSS (`Settings → Themes → QuickCSS`) without editing the file:
   --nfl-accent-text: #ffffff; /* text on the accent */
   --nfl-link: #ff0000;        /* links */
   --nfl-logo: url("https://i.imgur.com/your-image.png"); /* home button */
+  --nfl-sidebar: #1a2b3c !important; /* channel list background */
+  --glass-blur: 28px; /* frosted-glass strength */
+  --glass-radius: 18px; /* glass panel corner roundness */
 }
 ```
 
@@ -78,15 +102,20 @@ Vencord QuickCSS (`Settings → Themes → QuickCSS`) without editing the file:
 ## What each theme changes
 
 - Team logo as the Discord home button (top of the server list)
-- Brand/accent color (buttons, toggles, sliders, badges, unread indicators)
+- Liquid-glass outer frame: team-tinted glowing backdrop with frosted
+  server rail, channel list, and member list (blur, rounded corners,
+  glossy highlights). The chat column stays solid so messages stay readable
+- Channel list rows in full team color (solid selected channel, tinted hover/active)
 - Hover/active shades derived from the accent for readable feedback
 - Links and mentions in the secondary team color
-- Soft team-tinted backgrounds for mentions, highlights, and selected rows
+- Soft team-tinted backgrounds for mentions and highlights
+- Channel list rows in full team color (solid selected channel, tinted hover/active)
 - Text selection in team colors
 - On-accent text (black or white) chosen per team for WCAG AA contrast
 
-Backgrounds are left at Discord defaults on purpose, so readability never
-suffers — the team identity comes through the accents.
+Backgrounds are tinted subtly on purpose, and the chat area itself stays at
+Discord defaults, so readability never suffers — the team identity comes
+through the channel list, logo, and accents.
 
 ## Regenerating
 

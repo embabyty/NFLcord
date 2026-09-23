@@ -16,6 +16,13 @@ OUT = ROOT / "themes"
 LOGO_BRANCH = "vencord"
 LOGO_BASE = f"https://raw.githubusercontent.com/embabyty/NFLcord/{LOGO_BRANCH}/assets/logos"
 
+# Channel-list background = team tint mixed into Discord's sidebar base.
+# Kept subtle on purpose so channel names stay readable everywhere.
+SIDEBAR_DARK_BASE = "#2B2D31"
+SIDEBAR_LIGHT_BASE = "#F2F3F5"
+SIDEBAR_DARK_RATIO = 0.22
+SIDEBAR_LIGHT_RATIO = 0.24
+
 # name, slug, abbr, division, primary, primaryName, secondary, secondaryName,
 # accent (main interactive color), link (link/mention base color), tint override
 TEAMS = [
@@ -130,6 +137,8 @@ TEMPLATE = Template("""/**
  * Customize in Vencord QuickCSS, e.g.:
  * :root { --nfl-accent: #ff0000; --nfl-accent-text: #ffffff; }
  * :root { --nfl-logo: url("https://i.imgur.com/your-image.png"); }
+ * Vesktop acrylic transparency (Settings → Window → Background Material):
+ * :root { --glass-opacity: 0.55; }  (then fully restart Discord)
  */
 
 :root {
@@ -142,6 +151,12 @@ TEMPLATE = Template("""/**
   --nfl-tint: $tint;
   --nfl-link: $link;
   --nfl-logo: url("$logoUrl");
+  --glass-blur: 20px;
+  --glass-radius: 14px;
+  /* Backdrop opacity. Keep 1 normally; lower it (e.g. 0.55) in QuickCSS when
+     using Vesktop's Background Material (Acrylic) so the blurred wallpaper
+     shows through. A restart is required after changing that setting. */
+  --glass-opacity: 1;
 }
 
 .theme-light,
@@ -194,22 +209,100 @@ TEMPLATE = Template("""/**
   --background-mentioned-hover: color-mix(in srgb, var(--nfl-accent) 24%, transparent) !important;
   --background-message-highlight: color-mix(in srgb, var(--nfl-accent) 12%, transparent) !important;
   --background-message-highlight-hover: color-mix(in srgb, var(--nfl-accent) 18%, transparent) !important;
-  --background-modifier-selected: color-mix(in srgb, var(--nfl-accent) 26%, transparent) !important;
-  --background-modifier-active: color-mix(in srgb, var(--nfl-accent) 18%, transparent) !important;
-  --background-modifier-hover: color-mix(in srgb, var(--nfl-accent) 10%, transparent) !important;
+
+  /* channel list (and member/settings) rows in full team color.
+     Selected mixes the accent toward the on-accent text color so the row
+     looks solid while the channel name stays readable on every team. */
+  --background-modifier-hover: color-mix(in srgb, var(--nfl-accent) 18%, transparent) !important;
+  --background-modifier-active: color-mix(in srgb, var(--nfl-accent) 32%, transparent) !important;
+  --background-modifier-selected: color-mix(in srgb, var(--nfl-accent) 62%, var(--nfl-accent-text)) !important;
 }
 
 /* text on top of backgrounds: nudge the hue toward white/black per mode */
 .theme-dark {
+  --nfl-sidebar: $sidebarDark;
+  --background-secondary: var(--nfl-sidebar) !important;
+  --background-secondary-alt: var(--nfl-sidebar) !important;
+  --glass-backdrop:
+    radial-gradient(1100px 750px at 12% -8%, color-mix(in srgb, var(--nfl-accent) 30%, transparent), transparent 62%),
+    radial-gradient(950px 700px at 108% 108%, color-mix(in srgb, var(--nfl-tint) 32%, transparent), transparent 60%),
+    linear-gradient(160deg, rgba(17, 20, 27, var(--glass-opacity)) 0%, rgba(11, 14, 20, var(--glass-opacity)) 55%, rgba(12, 15, 22, var(--glass-opacity)) 100%) !important;
+  --glass-bg: color-mix(in srgb, var(--nfl-sidebar) 58%, transparent) !important;
+  --glass-edge: rgba(255, 255, 255, 0.09) !important;
+  --glass-highlight: rgba(255, 255, 255, 0.10) !important;
   --text-brand: color-mix(in srgb, var(--nfl-accent) 60%, white) !important;
   --text-link: color-mix(in srgb, var(--nfl-link) 80%, white) !important;
   --mention-foreground: color-mix(in srgb, var(--nfl-accent) 45%, white) !important;
 }
 
 .theme-light {
+  --nfl-sidebar: $sidebarLight;
+  --background-secondary: var(--nfl-sidebar) !important;
+  --background-secondary-alt: var(--nfl-sidebar) !important;
+  --glass-backdrop:
+    radial-gradient(1100px 750px at 12% -8%, color-mix(in srgb, var(--nfl-accent) 22%, transparent), transparent 62%),
+    radial-gradient(950px 700px at 108% 108%, color-mix(in srgb, var(--nfl-tint) 26%, transparent), transparent 60%),
+    linear-gradient(160deg, rgba(238, 240, 245, var(--glass-opacity)) 0%, rgba(226, 230, 238, var(--glass-opacity)) 55%, rgba(223, 227, 235, var(--glass-opacity)) 100%) !important;
+  --glass-bg: color-mix(in srgb, var(--nfl-sidebar) 50%, rgba(255, 255, 255, 0.5)) !important;
+  --glass-edge: rgba(15, 20, 30, 0.10) !important;
+  --glass-highlight: rgba(255, 255, 255, 0.55) !important;
   --text-brand: color-mix(in srgb, var(--nfl-accent) 78%, black) !important;
   --text-link: color-mix(in srgb, var(--nfl-link) 78%, black) !important;
   --mention-foreground: color-mix(in srgb, var(--nfl-accent) 80%, black) !important;
+}
+
+/* ===== liquid glass outer frame =====
+ * A team-tinted backdrop glows behind the app while the server rail,
+ * channel list, and member list become frosted-glass panels.
+ * The chat column intentionally stays solid so messages stay readable.
+ * NOTE: single-underscore substring selectors (e.g. guilds_) match both the
+ * current (guilds_abc12) and legacy (guilds__abc12) Discord class formats. */
+body {
+  background: var(--glass-backdrop) !important;
+}
+
+html,
+#app-mount,
+#app-mount > div,
+#app-mount > div > div,
+#app-mount [class*="app_"],
+#app-mount [class*="app-"],
+#app-mount [class*="bg_"],
+#app-mount [class*="bg-"] {
+  background: transparent !important;
+}
+
+[class*="guilds_"],
+[class*="sidebarList_"],
+[class*="membersWrap_"] {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
+  border-radius: var(--glass-radius);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 1px 0 var(--glass-highlight),
+    0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+[class*="guilds_"] {
+  margin: 10px 0 10px 10px;
+}
+
+[class*="sidebarList_"] {
+  margin: 10px;
+}
+
+[class*="membersWrap_"] {
+  margin: 10px 10px 10px 0;
+}
+
+/* inner containers must not repaint over the glass */
+[class*="guilds_"] div[class*="scroller_"],
+[class*="sidebarList_"] div[class*="container_"],
+[class*="sidebarList_"] div[class*="scroller_"],
+[class*="membersWrap_"] > div {
+  background: transparent !important;
 }
 
 ::selection {
@@ -218,8 +311,8 @@ TEMPLATE = Template("""/**
 }
 
 /* team logo as the Discord home button (top of the server list) */
-[data-list-item-id="guildsnav___home"] > [class*="childWrapper__"],
-[class*="tutorialContainer__"] [class*="childWrapper__"] {
+[data-list-item-id="guildsnav___home"] > [class*="childWrapper_"],
+[class*="tutorialContainer_"] [class*="childWrapper_"] {
   background-color: transparent !important;
   background-image: var(--nfl-logo) !important;
   background-size: 88% !important;
@@ -227,8 +320,8 @@ TEMPLATE = Template("""/**
   background-repeat: no-repeat !important;
 }
 
-[data-list-item-id="guildsnav___home"] [class*="childWrapper__"] > svg,
-[class*="tutorialContainer__"] [class*="childWrapper__"] > svg {
+[data-list-item-id="guildsnav___home"] [class*="childWrapper_"] > svg,
+[class*="tutorialContainer_"] [class*="childWrapper_"] > svg {
   display: none !important;
 }
 """)
@@ -306,12 +399,15 @@ def main() -> None:
         tint = t.get("tint", t["primary"]).upper()
         if tint in ("#000000", "#FFFFFF"):
             tint = accent
+        sidebar_dark = mix_hex(tint, SIDEBAR_DARK_BASE, 1 - SIDEBAR_DARK_RATIO)
+        sidebar_light = mix_hex(tint, SIDEBAR_LIGHT_BASE, 1 - SIDEBAR_LIGHT_RATIO)
         css = TEMPLATE.substitute(
             name=t["name"], abbr=t["abbr"], division=t["division"],
             primary=t["primary"].upper(), secondary=t["secondary"].upper(),
             accent=accent, hover=hover, active=active, accentText=accent_text,
             tint=tint, link=link, linkName=link_name, colorway=colorway,
             accentName=accent_name, logoUrl=f"{LOGO_BASE}/{t['slug']}.png",
+            sidebarDark=sidebar_dark, sidebarLight=sidebar_light,
             accentHsl=hex_to_hsl_triplet(accent),
             hoverHsl=hex_to_hsl_triplet(hover),
             activeHsl=hex_to_hsl_triplet(active),
