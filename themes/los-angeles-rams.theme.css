@@ -1,0 +1,114 @@
+/**
+ * @name NFLcord • Los Angeles Rams
+ * @author NFLcord
+ * @version 1.0.0
+ * @description Los Angeles Rams (LAR · NFC West) — Royal Blue #003594 with Sol Yellow #FFA300. Part of the NFLcord collection covering all 32 NFL teams.
+ * @source https://github.com/embabyty/NFLcord
+ */
+
+/* NFLcord • Los Angeles Rams (LAR · NFC West)
+ * Colors: Royal Blue #003594 / Sol Yellow #FFA300 (primary #003594, secondary #FFA300)
+ * Customize in Vencord QuickCSS, e.g.:
+ * :root { --nfl-accent: #ff0000; --nfl-accent-text: #ffffff; }
+ * :root { --nfl-logo: url("https://i.imgur.com/your-image.png"); }
+ */
+
+:root {
+  --nfl-primary: #003594;
+  --nfl-secondary: #FFA300;
+  --nfl-accent: #003594;
+  --nfl-accent-hover: #2451A3;
+  --nfl-accent-active: #426AB0;
+  --nfl-accent-text: #FFFFFF;
+  --nfl-tint: #003594;
+  --nfl-link: #FFA300;
+  --nfl-logo: url("https://raw.githubusercontent.com/embabyty/NFLcord/vencord/assets/logos/los-angeles-rams.png");
+}
+
+.theme-light,
+.theme-dark {
+  /* legacy brand scale */
+  --brand-experiment: var(--nfl-accent) !important;
+  --brand-experiment-360: var(--nfl-accent-hover) !important;
+  --brand-experiment-400: var(--nfl-accent-hover) !important;
+  --brand-experiment-430: var(--nfl-accent) !important;
+  --brand-experiment-460: var(--nfl-accent) !important;
+  --brand-experiment-500: var(--nfl-accent) !important;
+  --brand-experiment-530: var(--nfl-accent) !important;
+  --brand-experiment-560: var(--nfl-accent-hover) !important;
+  --brand-experiment-600: var(--nfl-accent-active) !important;
+  --brand-experiment-630: var(--nfl-accent-active) !important;
+  --brand-345: var(--nfl-accent-hover) !important;
+  --brand-360: var(--nfl-accent-hover) !important;
+  --brand-400: var(--nfl-accent-hover) !important;
+  --brand-430: var(--nfl-accent) !important;
+  --brand-460: var(--nfl-accent) !important;
+  --brand-500: var(--nfl-accent) !important;
+  --brand-500-hsl: 218.5 100.0% 29.0% !important;
+  --brand-530: var(--nfl-accent) !important;
+  --brand-560: var(--nfl-accent-hover) !important;
+  --brand-560-hsl: 218.7 63.8% 39.0% !important;
+  --brand-600: var(--nfl-accent-active) !important;
+  --brand-600-hsl: 218.2 45.5% 47.5% !important;
+  --brand-630: var(--nfl-accent-active) !important;
+
+  /* controls, buttons, badges (solid fills use the pure accent) */
+  --control-brand-foreground: var(--nfl-accent) !important;
+  --background-brand: var(--nfl-accent) !important;
+  --background-accent: var(--nfl-accent) !important;
+  --button-brand-background: var(--nfl-accent) !important;
+  --button-brand-background-hover: var(--nfl-accent-hover) !important;
+  --button-brand-background-active: var(--nfl-accent-active) !important;
+  --button-brand-text: var(--nfl-accent-text) !important;
+  --button-filled-brand-background: var(--nfl-accent) !important;
+  --button-filled-brand-background-hover: var(--nfl-accent-hover) !important;
+  --button-filled-brand-background-active: var(--nfl-accent-active) !important;
+  --button-filled-brand-text: var(--nfl-accent-text) !important;
+  --badge-brand-bg: var(--nfl-accent) !important;
+  --badge-brand-text: var(--nfl-accent-text) !important;
+  --focus-primary: var(--nfl-accent) !important;
+  --border-brand: color-mix(in srgb, var(--nfl-accent) 60%, transparent) !important;
+
+  /* soft surfaces keep the team hue at low opacity */
+  --mention-background: color-mix(in srgb, var(--nfl-accent) 26%, transparent) !important;
+  --background-mentioned: color-mix(in srgb, var(--nfl-accent) 16%, transparent) !important;
+  --background-mentioned-hover: color-mix(in srgb, var(--nfl-accent) 24%, transparent) !important;
+  --background-message-highlight: color-mix(in srgb, var(--nfl-accent) 12%, transparent) !important;
+  --background-message-highlight-hover: color-mix(in srgb, var(--nfl-accent) 18%, transparent) !important;
+  --background-modifier-selected: color-mix(in srgb, var(--nfl-accent) 26%, transparent) !important;
+  --background-modifier-active: color-mix(in srgb, var(--nfl-accent) 18%, transparent) !important;
+  --background-modifier-hover: color-mix(in srgb, var(--nfl-accent) 10%, transparent) !important;
+}
+
+/* text on top of backgrounds: nudge the hue toward white/black per mode */
+.theme-dark {
+  --text-brand: color-mix(in srgb, var(--nfl-accent) 60%, white) !important;
+  --text-link: color-mix(in srgb, var(--nfl-link) 80%, white) !important;
+  --mention-foreground: color-mix(in srgb, var(--nfl-accent) 45%, white) !important;
+}
+
+.theme-light {
+  --text-brand: color-mix(in srgb, var(--nfl-accent) 78%, black) !important;
+  --text-link: color-mix(in srgb, var(--nfl-link) 78%, black) !important;
+  --mention-foreground: color-mix(in srgb, var(--nfl-accent) 80%, black) !important;
+}
+
+::selection {
+  background: var(--nfl-accent) !important;
+  color: var(--nfl-accent-text) !important;
+}
+
+/* team logo as the Discord home button (top of the server list) */
+[data-list-item-id="guildsnav___home"] > [class*="childWrapper__"],
+[class*="tutorialContainer__"] [class*="childWrapper__"] {
+  background-color: transparent !important;
+  background-image: var(--nfl-logo) !important;
+  background-size: 88% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+[data-list-item-id="guildsnav___home"] [class*="childWrapper__"] > svg,
+[class*="tutorialContainer__"] [class*="childWrapper__"] > svg {
+  display: none !important;
+}
