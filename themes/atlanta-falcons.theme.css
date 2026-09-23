@@ -13,6 +13,7 @@
  * :root { --nfl-logo: url("https://i.imgur.com/your-image.png"); }
  * Vesktop acrylic transparency (Settings → Window → Background Material):
  * :root { --glass-opacity: 0.55; }  (then fully restart Discord)
+ * Full-transparency dark-acrylic preset (QuickCSS): see presets/ in the repo.
  */
 
 :root {
@@ -95,8 +96,20 @@
 /* text on top of backgrounds: nudge the hue toward white/black per mode */
 .theme-dark {
   --nfl-sidebar: #462931;
-  --background-secondary: var(--nfl-sidebar) !important;
-  --background-secondary-alt: var(--nfl-sidebar) !important;
+  /* whole-UI translucent surfaces (chat, headers, inputs, popouts, modals) */
+  --glass-chat: color-mix(in srgb, color-mix(in srgb, var(--nfl-tint) 14%, #191c23) 78%, transparent) !important;
+  --glass-float: color-mix(in srgb, #20232c 84%, transparent) !important;
+  --background-primary: var(--glass-chat) !important;
+  --background-secondary: color-mix(in srgb, var(--nfl-sidebar) 68%, transparent) !important;
+  --background-secondary-alt: color-mix(in srgb, var(--nfl-sidebar) 60%, transparent) !important;
+  --background-tertiary: var(--glass-chat) !important;
+  --background-floating: var(--glass-float) !important;
+  --modal-background: var(--glass-float) !important;
+  --modal-footer-background: transparent !important;
+  --home-background: var(--glass-chat) !important;
+  --channeltextarea-background: color-mix(in srgb, #26282f 72%, transparent) !important;
+  --input-background: color-mix(in srgb, #1d1f26 70%, transparent) !important;
+  --background-message-hover: color-mix(in srgb, var(--nfl-accent) 9%, transparent) !important;
   --glass-backdrop:
     radial-gradient(1100px 750px at 12% -8%, color-mix(in srgb, var(--nfl-accent) 30%, transparent), transparent 62%),
     radial-gradient(950px 700px at 108% 108%, color-mix(in srgb, var(--nfl-tint) 32%, transparent), transparent 60%),
@@ -111,8 +124,20 @@
 
 .theme-light {
   --nfl-sidebar: #E0BFC6;
-  --background-secondary: var(--nfl-sidebar) !important;
-  --background-secondary-alt: var(--nfl-sidebar) !important;
+  /* whole-UI translucent surfaces (chat, headers, inputs, popouts, modals) */
+  --glass-chat: color-mix(in srgb, color-mix(in srgb, var(--nfl-tint) 12%, #f4f5f8) 80%, transparent) !important;
+  --glass-float: color-mix(in srgb, #ffffff 86%, transparent) !important;
+  --background-primary: var(--glass-chat) !important;
+  --background-secondary: color-mix(in srgb, var(--nfl-sidebar) 68%, transparent) !important;
+  --background-secondary-alt: color-mix(in srgb, var(--nfl-sidebar) 60%, transparent) !important;
+  --background-tertiary: var(--glass-chat) !important;
+  --background-floating: var(--glass-float) !important;
+  --modal-background: var(--glass-float) !important;
+  --modal-footer-background: transparent !important;
+  --home-background: var(--glass-chat) !important;
+  --channeltextarea-background: color-mix(in srgb, #ebedef 75%, transparent) !important;
+  --input-background: color-mix(in srgb, #e3e5e8 72%, transparent) !important;
+  --background-message-hover: color-mix(in srgb, var(--nfl-accent) 9%, transparent) !important;
   --glass-backdrop:
     radial-gradient(1100px 750px at 12% -8%, color-mix(in srgb, var(--nfl-accent) 22%, transparent), transparent 62%),
     radial-gradient(950px 700px at 108% 108%, color-mix(in srgb, var(--nfl-tint) 26%, transparent), transparent 60%),
@@ -125,10 +150,13 @@
   --mention-foreground: color-mix(in srgb, var(--nfl-accent) 80%, black) !important;
 }
 
-/* ===== liquid glass outer frame =====
- * A team-tinted backdrop glows behind the app while the server rail,
- * channel list, and member list become frosted-glass panels.
- * The chat column intentionally stays solid so messages stay readable.
+/* ===== liquid glass: whole Discord UI =====
+ * A team-tinted backdrop glows behind the app. The server rail, channel
+ * list, member list, and chat become floating frosted-glass panels, while
+ * every other surface (headers, inputs, popouts, modals, settings, friends)
+ * turns translucent through the variables above.
+ * Blur is kept to the mostly-static outer panels for performance; the chat
+ * column stays unblurred so scrolling stays smooth and messages readable.
  * NOTE: single-underscore substring selectors (e.g. guilds_) match both the
  * current (guilds_abc12) and legacy (guilds__abc12) Discord class formats. */
 body {
@@ -153,6 +181,7 @@ html,
   backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.25);
   border-radius: var(--glass-radius);
+  overflow: hidden;
   box-shadow:
     inset 0 0 0 1px var(--glass-edge),
     inset 0 1px 0 var(--glass-highlight),
@@ -169,6 +198,18 @@ html,
 
 [class*="membersWrap_"] {
   margin: 10px 10px 10px 0;
+}
+
+/* chat column as a floating panel (translucent, unblurred for smooth scroll) */
+[class*="chat_"] {
+  background: var(--glass-chat) !important;
+  border-radius: var(--glass-radius);
+  overflow: hidden;
+  margin: 10px 10px 10px 0;
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 1px 0 var(--glass-highlight),
+    0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 /* inner containers must not repaint over the glass */

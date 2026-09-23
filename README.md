@@ -42,6 +42,22 @@ Values around `0.45–0.65` look best; `1` (default) is fully opaque.
 On clients without a transparency setting, lowering it just deepens
 the backdrop, so it is safe to experiment.
 
+### Full-transparency preset (dark acrylic)
+
+For the full see-through look with text kept readable, use
+[`presets/full-transparent-dark-acrylic.css`](presets/full-transparent-dark-acrylic.css).
+Easiest option — paste this as the **very first line** of your QuickCSS:
+
+```css
+@import url("https://raw.githubusercontent.com/embabyty/NFLcord/vencord/presets/full-transparent-dark-acrylic.css");
+```
+
+Or paste the preset's contents at the **end** of your QuickCSS.
+It drops the backdrop to ~35% and thins the panels/chat/popouts/inputs
+while keeping them solid enough to read over a dark wallpaper
+(use a dark wallpaper — bright ones will wash text out).
+Tune the percentages in the file to taste: higher = more solid.
+
 ## Customize
 
 Every theme exposes its palette as CSS variables, so you can tweak it in
@@ -102,9 +118,10 @@ Vencord QuickCSS (`Settings → Themes → QuickCSS`) without editing the file:
 ## What each theme changes
 
 - Team logo as the Discord home button (top of the server list)
-- Liquid-glass outer frame: team-tinted glowing backdrop with frosted
-  server rail, channel list, and member list (blur, rounded corners,
-  glossy highlights). The chat column stays solid so messages stay readable
+- Liquid glass across the whole UI: team-tinted glowing backdrop, frosted
+  server rail / channel list / member list (blur, rounded corners, glossy
+  highlights), floating translucent chat panel, and translucent headers,
+  inputs, popouts, modals, settings, and friends views
 - Channel list rows in full team color (solid selected channel, tinted hover/active)
 - Hover/active shades derived from the accent for readable feedback
 - Links and mentions in the secondary team color
@@ -113,9 +130,10 @@ Vencord QuickCSS (`Settings → Themes → QuickCSS`) without editing the file:
 - Text selection in team colors
 - On-accent text (black or white) chosen per team for WCAG AA contrast
 
-Backgrounds are tinted subtly on purpose, and the chat area itself stays at
-Discord defaults, so readability never suffers — the team identity comes
-through the channel list, logo, and accents.
+Surfaces stay translucent rather than fully transparent (roughly 70–85%
+opaque), and blur is reserved for the mostly-static outer panels so chat
+scrolling stays smooth — the team identity comes through everywhere
+without hurting readability.
 
 ## Regenerating
 

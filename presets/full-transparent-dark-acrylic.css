@@ -1,0 +1,31 @@
+/**
+ * NFLcord preset: full transparency for dark acrylic setups.
+ * Works with any NFLcord team theme.
+ *
+ * Requires: Vesktop Settings → Window → Background Material → Acrylic
+ * (or another transparent effect), then a FULL restart of Discord.
+ * A dark desktop wallpaper is strongly recommended so text stays readable.
+ *
+ * Usage (pick one):
+ *   1. Paste the whole block at the END of Vencord QuickCSS
+ *      (Settings → Themes → QuickCSS), or
+ *   2. Paste ONLY this line as the VERY FIRST line of your QuickCSS:
+ *      @import url("https://raw.githubusercontent.com/embabyty/NFLcord/vencord/presets/full-transparent-dark-acrylic.css");
+ *
+ * Tune the percentages to taste: higher = more solid = easier to read.
+ */
+
+:root {
+  --glass-opacity: 0.35;
+  --glass-blur: 24px;
+}
+
+.theme-dark {
+  --glass-bg: color-mix(in srgb, var(--nfl-sidebar) 45%, transparent) !important;
+  --glass-chat: color-mix(in srgb, color-mix(in srgb, var(--nfl-tint) 14%, #191c23) 60%, transparent) !important;
+  --glass-float: color-mix(in srgb, #20232c 78%, transparent) !important;
+  --background-secondary: color-mix(in srgb, var(--nfl-sidebar) 50%, transparent) !important;
+  --background-secondary-alt: color-mix(in srgb, var(--nfl-sidebar) 45%, transparent) !important;
+  --channeltextarea-background: color-mix(in srgb, #26282f 60%, transparent) !important;
+  --input-background: color-mix(in srgb, #1d1f26 60%, transparent) !important;
+}
